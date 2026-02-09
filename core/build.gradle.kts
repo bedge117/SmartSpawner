@@ -48,6 +48,8 @@ dependencies {
         exclude(group = "org.bukkit")
     }
 
+    compileOnly("net.citizensnpcs:citizensapi:2.0.35-SNAPSHOT")
+
     compileOnly("io.lumine:Mythic-Dist:5.11.2")
     compileOnly("com.iridium:IridiumSkyblock:4.1.2")
 

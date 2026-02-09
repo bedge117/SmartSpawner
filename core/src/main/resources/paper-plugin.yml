@@ -130,6 +130,12 @@ dependencies:
       required: false
       join-classpath: true
 
+    # NPC Plugins
+    Citizens:
+      load: BEFORE
+      required: false
+      join-classpath: true
+
     # Drops Plugins
     MythicMobs:
       load: BEFORE

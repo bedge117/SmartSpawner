@@ -3,7 +3,7 @@ package github.nighter.smartspawner.spawner.lootgen;
 import org.bukkit.Location;
 import java.util.UUID;
 
-record PlayerRangeWrapper(UUID worldUID, double x, double y, double z, boolean spawnConditions) {
+public record PlayerRangeWrapper(UUID worldUID, double x, double y, double z, boolean spawnConditions) {
 
     double distanceSquared(Location loc2) {
         double dx = this.x - loc2.getX();

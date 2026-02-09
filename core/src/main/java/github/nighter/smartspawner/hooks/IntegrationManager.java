@@ -3,6 +3,7 @@ package github.nighter.smartspawner.hooks;
 import com.plotsquared.core.PlotAPI;
 import github.nighter.smartspawner.SmartSpawner;
 import github.nighter.smartspawner.hooks.drops.MythicMobsHook;
+import github.nighter.smartspawner.hooks.npcs.CitizensHook;
 import github.nighter.smartspawner.hooks.protections.api.IridiumSkyblock;
 import github.nighter.smartspawner.hooks.protections.api.Lands;
 import github.nighter.smartspawner.hooks.protections.api.PlotSquared;
@@ -40,10 +41,12 @@ public class IntegrationManager {
     // Integration plugin flags
     private boolean hasAuraSkills = false;
     private boolean hasFloodgate = false;
+    private boolean hasCitizens = false;
 
     // Integration instances
     public AuraSkillsIntegration auraSkillsIntegration;
     public FloodgateHook floodgateHook;
+    public CitizensHook citizensHook;
 
     public IntegrationManager(SmartSpawner plugin) {
         this.plugin = plugin;
@@ -162,6 +165,17 @@ public class IntegrationManager {
             }
         }, true);
 
+        hasCitizens = checkPlugin("Citizens", () -> {
+            Plugin citizensPlugin = Bukkit.getPluginManager().getPlugin("Citizens");
+            if (citizensPlugin != null && citizensPlugin.isEnabled()) {
+                this.citizensHook = new CitizensHook(plugin);
+                return this.citizensHook.isEnabled();
+            } else {
+                this.citizensHook = null;
+                return false;
+            }
+        }, true);
+
         hasFloodgate = checkPlugin("Floodgate", () -> {
             Plugin floodgatePlugin = Bukkit.getPluginManager().getPlugin("floodgate");
             if (floodgatePlugin != null && floodgatePlugin.isEnabled()) {
@@ -191,6 +205,9 @@ public class IntegrationManager {
     public void reload() {
         if (auraSkillsIntegration != null) {
             auraSkillsIntegration.reloadConfig();
+        }
+        if (citizensHook != null) {
+            citizensHook.reload();
         }
     }
 

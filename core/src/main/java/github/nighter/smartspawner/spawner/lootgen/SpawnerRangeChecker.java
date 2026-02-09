@@ -10,6 +10,8 @@ import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
+import github.nighter.smartspawner.hooks.npcs.CitizensHook;
+
 import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -73,7 +75,15 @@ public class SpawnerRangeChecker {
 
     private PlayerRangeWrapper[] getRangePlayers() {
         final Player[] onlinePlayers = Bukkit.getOnlinePlayers().toArray(new Player[0]);
-        final PlayerRangeWrapper[] rangePlayers = new PlayerRangeWrapper[onlinePlayers.length];
+
+        // Collect NPC wrappers if Citizens integration is active
+        List<PlayerRangeWrapper> npcWrappers = List.of();
+        CitizensHook citizensHook = plugin.getIntegrationManager().citizensHook;
+        if (citizensHook != null && citizensHook.isEnabled()) {
+            npcWrappers = citizensHook.getSpawnedNPCWrappers();
+        }
+
+        final PlayerRangeWrapper[] rangePlayers = new PlayerRangeWrapper[onlinePlayers.length + npcWrappers.size()];
         int i = 0;
 
         for (Player p : onlinePlayers) {
@@ -86,6 +96,11 @@ public class SpawnerRangeChecker {
                     p.getX(), p.getY(), p.getZ(),
                     conditions
             );
+        }
+
+        // Append NPC locations
+        for (PlayerRangeWrapper npcWrapper : npcWrappers) {
+            rangePlayers[i++] = npcWrapper;
         }
 
         return rangePlayers;

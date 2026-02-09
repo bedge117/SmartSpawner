@@ -42,6 +42,9 @@ softdepend:
   # RPG/Skill Plugins
   - AuraSkills
 
+  # NPC Plugins
+  - Citizens
+
   #Drops Plugins
   - MythicMobs
 
